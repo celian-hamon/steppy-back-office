@@ -18,22 +18,23 @@ import RTL from "views/admin/rtl";
 
 // Auth Imports
 import SignInCentered from "views/auth/signIn";
+import {IoMdTrophy} from "react-icons/io";
 
 const routes = [
   {
-    name: "Main Dashboard",
+    name: "Challenge actuel",
     layout: "/admin",
     path: "/default",
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component: MainDashboard,
   },
   {
-    name: "NFT Marketplace",
+    name: "Challenges",
     layout: "/admin",
-    path: "/nft-marketplace",
+    path: "/challenge",
     icon: (
       <Icon
-        as={MdOutlineShoppingCart}
+        as={IoMdTrophy}
         width='20px'
         height='20px'
         color='inherit'
@@ -62,13 +63,6 @@ const routes = [
     path: "/sign-in",
     icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
     component: SignInCentered,
-  },
-  {
-    name: "RTL Admin",
-    layout: "/rtl",
-    path: "/rtl-default",
-    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-    component: RTL,
   },
 ];
 

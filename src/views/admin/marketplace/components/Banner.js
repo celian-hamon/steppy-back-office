@@ -61,7 +61,7 @@ export default function Banner() {
           py='20px'
           px='27'
           me='38px'>
-          Discover now
+
         </Button>
         <Link>
           <Text color='white' fontSize='sm' fontWeight='500'>
