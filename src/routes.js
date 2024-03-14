@@ -44,20 +44,14 @@ const routes = [
     secondary: true,
   },
   {
-    name: "Data Tables",
+    name: "Users",
     layout: "/admin",
     icon: <Icon as={MdBarChart} width='20px' height='20px' color='inherit' />,
-    path: "/data-tables",
+    path: "/users",
     component: DataTables,
   },
-  {
-    name: "Profile",
-    layout: "/admin",
-    path: "/profile",
-    icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
-    component: Profile,
-  },
-  {
+  localStorage.getItem('token') !== null ? {} :
+      {
     name: "Sign In",
     layout: "/auth",
     path: "/sign-in",

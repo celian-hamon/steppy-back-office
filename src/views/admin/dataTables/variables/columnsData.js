@@ -38,21 +38,24 @@ export const columnsDataCheck = [
 
 export const columnsDataColumns = [
   {
-    Header: "NAME",
-    accessor: "name",
+    Header: "CODE",
+    accessor: "code",
   },
   {
-    Header: "PROGRESS",
-    accessor: "progress",
+    Header: "SUPPRIMER",
+    accessor: "supprimer",
+  }
+];
+
+export const messagesDataColumns = [
+  {
+    Header: "MESSAGE",
+    accessor: "message",
   },
   {
-    Header: "QUANTITY",
-    accessor: "quantity",
-  },
-  {
-    Header: "DATE",
-    accessor: "date",
-  },
+    Header: "SUPPRIMER",
+    accessor: "supprimer",
+  }
 ];
 
 export const columnsDataComplex = [

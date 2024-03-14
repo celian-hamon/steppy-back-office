@@ -1,65 +1,44 @@
-/*!
-  _   _  ___  ____  ___ ________  _   _   _   _ ___   
- | | | |/ _ \|  _ \|_ _|__  / _ \| \ | | | | | |_ _| 
- | |_| | | | | |_) || |  / / | | |  \| | | | | || | 
- |  _  | |_| |  _ < | | / /| |_| | |\  | | |_| || |
- |_| |_|\___/|_| \_\___/____\___/|_| \_|  \___/|___|
-                                                                                                                                                                                                                                                                                                                                       
-=========================================================
-* Horizon UI - v1.1.0
-=========================================================
-
-* Product Page: https://www.horizon-ui.com/
-* Copyright 2023 Horizon UI (https://www.horizon-ui.com/)
-
-* Designed and Coded by Simmmple
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 // Chakra imports
 import {
     Box,
     Button,
-    Flex,
-    Grid,
-    Link,
+    Flex, FormControl, FormLabel,
+    Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
+    ModalOverlay,
+    SimpleGrid,
     Text,
     useColorModeValue,
-    SimpleGrid,
+    useDisclosure,
 } from "@chakra-ui/react";
 
 // Custom components
-import Banner from "views/admin/marketplace/components/Banner";
-import TableTopCreators from "views/admin/marketplace/components/TableTopCreators";
-import HistoryItem from "views/admin/marketplace/components/HistoryItem";
 import NFT from "components/card/NFT";
-import Card from "components/card/Card.js";
-
-// Assets
-import Nft1 from "assets/img/nfts/Nft1.png";
-import Nft2 from "assets/img/nfts/Nft2.png";
-import Nft3 from "assets/img/nfts/Nft3.png";
-import Nft4 from "assets/img/nfts/Nft4.png";
-import Nft5 from "assets/img/nfts/Nft5.png";
-import Nft6 from "assets/img/nfts/Nft6.png";
-import Avatar1 from "assets/img/avatars/avatar1.png";
-import Avatar2 from "assets/img/avatars/avatar2.png";
-import Avatar3 from "assets/img/avatars/avatar3.png";
-import Avatar4 from "assets/img/avatars/avatar4.png";
-import tableDataTopCreators from "views/admin/marketplace/variables/tableDataTopCreators.json";
-import {tableColumnsTopCreators} from "views/admin/marketplace/variables/tableColumnsTopCreators";
+import {CreateChallenge} from "./components/createChallenge";
+import {Field, Form, Formik} from "formik";
+import redirect from "react-router-dom/es/Redirect";
 
 export default function Challenges() {
+    const [challenges, setChallenges] = useState([]);
+    useEffect(async () => {
+        const response = await fetch("http://localhost:80" + "/api/challenges", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        });
+        const data = await response.json();
+        setChallenges(data);
+    }, []);
+
     // Chakra Color Mode
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const textColorBrand = useColorModeValue("brand.500", "white");
     return (
+
         <Box pt={{base: "180px", md: "80px", xl: "80px"}}>
             {/* Main Fields */}
             <Flex
@@ -67,176 +46,105 @@ export default function Challenges() {
                 gridArea={{xl: "1 / 1 / 2 / 3", "2xl": "1 / 1 / 2 / 2"}}>
                 {/*<Banner />*/}
                 <Flex direction='column' width={"100%"}>
-                    {/*<Flex*/}
-                    {/*  mt='45px'*/}
-                    {/*  mb='20px'*/}
-                    {/*  justifyContent='space-between'*/}
-                    {/*  direction={{ base: "column", md: "row" }}*/}
-                    {/*  align={{ base: "start", md: "center" }}>*/}
-                    {/*  <Text color={textColor} fontSize='2xl' ms='24px' fontWeight='700'>*/}
-                    {/*    Trending NFTs*/}
-                    {/*  </Text>*/}
-                    {/*  <Flex*/}
-                    {/*    align='center'*/}
-                    {/*    me='20px'*/}
-                    {/*    ms={{ base: "24px", md: "0px" }}*/}
-                    {/*    mt={{ base: "20px", md: "0px" }}>*/}
-                    {/*    <Link*/}
-                    {/*      color={textColorBrand}*/}
-                    {/*      fontWeight='500'*/}
-                    {/*      me={{ base: "34px", md: "44px" }}*/}
-                    {/*      to='#art'>*/}
-                    {/*      Art*/}
-                    {/*    </Link>*/}
-                    {/*    <Link*/}
-                    {/*      color={textColorBrand}*/}
-                    {/*      fontWeight='500'*/}
-                    {/*      me={{ base: "34px", md: "44px" }}*/}
-                    {/*      to='#music'>*/}
-                    {/*      Music*/}
-                    {/*    </Link>*/}
-                    {/*    <Link*/}
-                    {/*      color={textColorBrand}*/}
-                    {/*      fontWeight='500'*/}
-                    {/*      me={{ base: "34px", md: "44px" }}*/}
-                    {/*      to='#collectibles'>*/}
-                    {/*      Collectibles*/}
-                    {/*    </Link>*/}
-                    {/*    <Link color={textColorBrand} fontWeight='500' to='#sports'>*/}
-                    {/*      Sports*/}
-                    {/*    </Link>*/}
-                    {/*  </Flex>*/}
-                    {/*</Flex>*/}
+                    <Flex>
+                        <ImportUsers/>
+                        <CreateChallenge/>
+                    </Flex>
                     <SimpleGrid columns={{base: 1, md: 3}} gap='20px'>
-                        <NFT
-                            name='Marcher pour le cancer'
-                            author='Par Association contre le cancer'
-                            bidders={[
-                                Avatar1,
-                                Avatar2,
-                                Avatar3,
-                                Avatar4,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                            ]}
-                            currentbid='0.91 ETH'
-                            download='#'
-                        />
-                        <NFT
-                            name='Marcher contre le tabac'
-                            author='Par Lutte anti-tabac'
-                            bidders={[
-                                Avatar1,
-                                Avatar2,
-                                Avatar3,
-                                Avatar4,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                            ]}
-                            currentbid='0.91 ETH'
-                            download='#'
-                        />
-                        <NFT
-                            name='Mesh Gradients '
-                            author='By Will Smith'
-                            bidders={[
-                                Avatar1,
-                                Avatar2,
-                                Avatar3,
-                                Avatar4,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                            ]}
-                            currentbid='0.91 ETH'
-                            download='#'
-                        />
-                    </SimpleGrid>
-                    <Text
-                        mt='45px'
-                        mb='36px'
-                        color={textColor}
-                        fontSize='2xl'
-                        ms='24px'
-                        fontWeight='700'>
-                        Recently Added
-                    </Text>
-                    <SimpleGrid
-                        columns={{base: 1, md: 3}}
-                        gap='20px'
-                        mb={{base: "20px", xl: "0px"}}>
-                        <NFT
-                            name='Swipe Circles'
-                            author='By Peter Will'
-                            bidders={[
-                                Avatar1,
-                                Avatar2,
-                                Avatar3,
-                                Avatar4,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                            ]}
-                            image={Nft4}
-                            currentbid='0.91 ETH'
-                            download='#'
-                        />
-                        <NFT
-                            name='Colorful Heaven'
-                            author='By Mark Benjamin'
-                            bidders={[
-                                Avatar1,
-                                Avatar2,
-                                Avatar3,
-                                Avatar4,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                            ]}
-                            currentbid='0.91 ETH'
-                            download='#'
-                        />
-                        <NFT
-                            name='3D Cubes Art'
-                            author='By Manny Gates'
-                            bidders={[
-                                Avatar1,
-                                Avatar2,
-                                Avatar3,
-                                Avatar4,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                                Avatar1,
-                            ]}
-                            currentbid='0.91 ETH'
-                            download='#'
-                        />
+                        {
+                            challenges.map((challenge, index) => {
+                                return <NFT
+                                    key={index}
+                                    name={challenge.name}
+                                    author={challenge.description}
+                                    challenge={challenge}
+                                />
+                            })
+                        }
                     </SimpleGrid>
                 </Flex>
             </Flex>
         </Box>
     );
+}
+
+function ImportUsers() {
+    const {isOpen, onOpen, onClose} = useDisclosure()
+    return (
+        <>
+            <Button
+                fontSize='sm'
+                variant='brand'
+                fontWeight='500'
+                w='100%'
+                h='50'
+                mr='24px'
+                onClick={onOpen}
+            >
+                Importer des utilisateurs
+            </Button>
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay/>
+                <ModalContent>
+                    <ModalContent>
+                        <ModalHeader>Importer des données</ModalHeader>
+                        <ModalBody>
+                            <Formik initialValues={{
+                                file: null,
+                            }} onSubmit={async (values, formikHelpers)=>{
+                                const formData = new FormData();
+                                const fileField = document.querySelector('input[type="file"]');
+                                const uploadedFile = fileField.files[0];
+
+                                formData.append( 'csv', uploadedFile );
+                                const response = await fetch("http://localhost:80" + "/api/import", {
+                                    method: "POST",
+                                    headers: {
+                                        "Accept": "application/json",
+                                        "Authorization": "Bearer " + localStorage.getItem("token")
+                                    },
+                                    body: formData
+                                });
+                                const data = await response.json();
+                                if (response.status === 200) {
+                                    onClose();
+                                } else {
+                                    localStorage.removeItem("token");
+                                    redirect("/");
+                                }
+                            }}>
+                                {(props) => (
+                                    <Form>
+                                        <Field name='file'>
+                                            {({field}) => (
+                                                <FormControl>
+                                                    <input
+                                                        {...field}
+                                                        type="file"
+                                                        name="file"
+                                                        accept="image/png, .svg, .csv"
+                                                        onChange={(event) => {
+                                                            const files = event.target.files;
+                                                            let myFiles =Array.from(files);
+                                                            props.setFieldValue("csv", myFiles);
+                                                        }}
+                                                    />
+                                                </FormControl>
+                                            )}
+                                        </Field>
+                                        <ModalFooter>
+                                                <Button type='submit' colorScheme='blue' mr={0}
+                                                        isLoading={props.isSubmitting}>Importer</Button>
+                                                <Button ml={"10px"} variant={'ghost'} onClick={onClose}>Fermer</Button>
+                                        </ModalFooter>
+                                    </Form>
+                                )}
+
+                            </Formik>
+                        </ModalBody>
+                    </ModalContent>
+                </ModalContent>
+            </Modal>
+        </>
+    )
 }

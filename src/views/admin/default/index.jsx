@@ -37,7 +37,7 @@ import Usa from "assets/img/dashboards/usa.png";
 import MiniCalendar from "components/calendar/MiniCalendar";
 import MiniStatistics from "components/card/MiniStatistics";
 import IconBox from "components/icons/IconBox";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
     MdAddTask,
     MdAttachMoney,
@@ -58,8 +58,28 @@ import {
 } from "views/admin/default/variables/columnsData";
 import tableDataCheck from "views/admin/default/variables/tableDataCheck.json";
 import tableDataComplex from "views/admin/default/variables/tableDataComplex.json";
+import redirect from "react-router-dom/es/Redirect";
 
 export default function UserReports() {
+    const [stats, setStats] = useState({});
+
+    useEffect(async () => {
+        const response = await fetch("http://localhost:80" + "/api/stats", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            }
+        });
+        const data = await response.json();
+        if (response.status === 200) {
+            setStats(data);
+        } else {
+            localStorage.removeItem("token");
+            redirect("/");
+        }
+    }, []);
+
     // Chakra Color Mode
     const brandColor = useColorModeValue("brand.500", "white");
     const boxBg = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
@@ -82,7 +102,7 @@ export default function UserReports() {
                         />
                     }
                     name='Pas Totaux'
-                    value='1,000'
+                    value={stats.totalSteps}
                 />
                 <MiniStatistics
                     startContent={
@@ -95,32 +115,18 @@ export default function UserReports() {
                             }
                         />
                     }
-                    name='Spend this month'
-                    value='$642.39'
+                    name='Pas ce mois'
+                    value={stats.totalMonthSteps}
                 />
-                <MiniStatistics growth='+23%' name='Sales' value='$574.34'/>
             </SimpleGrid>
 
             <SimpleGrid columns={{base: 1, md: 2, xl: 2}} gap='20px' mb='20px'>
-                <TotalSpent/>
-                <WeeklyRevenue/>
-            </SimpleGrid>
-            <SimpleGrid columns={{base: 1, md: 1, xl: 2}} gap='20px' mb='20px'>
-                <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck}/>
-                <SimpleGrid columns={{base: 1, md: 2, xl: 2}} gap='20px'>
-                    <DailyTraffic/>
-                    <PieCard/>
-                </SimpleGrid>
-            </SimpleGrid>
-            <SimpleGrid columns={{base: 1, md: 1, xl: 2}} gap='20px' mb='20px'>
-                <ComplexTable
-                    columnsData={columnsDataComplex}
-                    tableData={tableDataComplex}
-                />
-                <SimpleGrid columns={{base: 1, md: 2, xl: 2}} gap='20px'>
-                    <Tasks/>
-                    <MiniCalendar h='100%' minW='100%' selectRange={false}/>
-                </SimpleGrid>
+                {
+                    stats.monthSteps && <TotalSpent steps={stats.monthSteps}/>
+                }
+                {
+                    stats.weekSteps && <WeeklyRevenue steps={stats.weekSteps}/>
+                }
             </SimpleGrid>
         </Box>
     );
